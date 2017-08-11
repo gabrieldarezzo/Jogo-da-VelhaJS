@@ -13,5 +13,5 @@ Obs: Está sem I.A.
 Meu objetivo era só fazer a estruturação basica.
 
 Você pode ver o Demo aqui:
-http://gabrieldarezzo.github.io/velha/index.html
+https://gabrieldarezzo.github.io/Jogo-da-VelhaJS/index.html
 
