@@ -19,7 +19,7 @@ You can see this like a matrix:
 +---+---+---+
 */
 
-// Array definido 
+// Array with custom size
 var gameBoard = Array(
 	 Array(3)
 	,Array(3)
@@ -31,8 +31,6 @@ var gameBoard = Array(
 //                                   |         \   /
 
 function checkWinner(gameBoard) {
-    console.log(gameBoard);
-
     let cross_point = 0;
 	let circle_point = 0;
 
@@ -98,7 +96,6 @@ function checkWinner(gameBoard) {
 		if(gameBoard[i][i] == 'circle' ){
 			circle_point++;
 		}
-        console.log({cross_point});
 		
 		if(cross_point == 3){
 			return 'cross';
@@ -152,6 +149,31 @@ function checkWinner(gameBoard) {
 }
 
 
+// circle => Human 
+// cross => I.A. 
+
+const nextMoveIA = (gameBoard) => {
+	let avaibleMove = [];
+	for(var x = 0; x < 3; x++){
+		for(var y = 0; y < 3; y++){
+			if(!gameBoard[x][y]){
+				avaibleMove.push({x, y});
+			}
+		}
+	}	
+	const randomIndex = Math.floor(Math.random() * avaibleMove.length);	
+	if(avaibleMove.length == 0) return false;
+	drawActionPlayer(avaibleMove[randomIndex].x, avaibleMove[randomIndex].y, 'cross');
+};
+
+
+const drawActionPlayer = (x, y, playerString) => {
+	document.querySelector('[data-cell="' + y + ',' +  x + '"]')
+		.innerHTML = '<div class="' + playerString + '"></div>';
+	gameBoard[x][y] = playerString;
+};
+
+ 
 var cell = document.getElementsByClassName("cell");
 for (var i = 0; i < cell.length; i++) {
     cell[i].addEventListener('click', function(){
@@ -163,23 +185,19 @@ for (var i = 0; i < cell.length; i++) {
 		var y = parseInt(cell_xy[0]);
 	
 			
-		if(gameBoard[x][y]){
+		if(gameBoard[x][y]) {
 			alert('Já foi clicado');
 			return false;
 		}
+		
+		drawActionPlayer(x, y, 'circle');
+		setTimeout(nextMoveIA(gameBoard), 200);
 
-		this.innerHTML = '<div class="cross"></div>';
-		gameBoard[x][y] = 'cross';
-        
-        if(checkWinner(gameBoard) == 'circle') {
-			alert('Bolinha ganhou');
+		const nameWinner = checkWinner(gameBoard);
+		console.log('nameWinner: ', nameWinner);
+        if(nameWinner) {
+			console.log('WINNER =>>>>>>>', nameWinner);
 		}
-
-		if(checkWinner(gameBoard) == 'cross') {
-			alert('X ganhou');
-
-		}
-
 
 	}, false);
 }
